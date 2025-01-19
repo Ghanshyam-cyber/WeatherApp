@@ -1,6 +1,10 @@
 package com.ApiPractice.WheatherApp.Service;
 
 import com.ApiPractice.WheatherApp.ResponseModel.WeatherResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -42,12 +46,27 @@ public class WeatherService {
     }
 
     public WeatherResponse parseWeatherResponse(String jsonResponse) {
-        WeatherResponse wetherResponse = new WeatherResponse();
+        WeatherResponse weatherResponse = new WeatherResponse();
 
-        wetherResponse.setCityName("Parsed City Name");
-        wetherResponse.setTemperature("Parsed Temperature");
-//        wetherResponse.setDescription("Parsed Description");
+        try{
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
 
-        return wetherResponse;
+
+
+            // Example of parsing response data
+            weatherResponse.setCityName(rootNode.path("location").path("name").asText());
+            weatherResponse.setTemperature(rootNode.path("current").path("temperature").asText());
+            weatherResponse.setDescription(rootNode.path("current").path("weather_descriptions").get(0).asText());
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle parsing error here
+        }
+
+//        wetherResponse.setCityName("Parsed City Name");
+//        wetherResponse.setTemperature("Parsed Temperature");
+//      wetherResponse.setDescription("Parsed Description");
+
+        return weatherResponse;
     }
 }

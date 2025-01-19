@@ -11,7 +11,7 @@ public class WeatherResponse {
     @JsonProperty("temperature")
     private  String temperature;
 
-//    private String description;
+    private String description;
 
     public String getCityName() {
         return cityName;
@@ -29,11 +29,11 @@ public class WeatherResponse {
         this.temperature = temperature;
     }
 
-//    public String getDescription() {
-//        return description;
-//    }
-//
-//    public void setDescription(String description) {
-//        this.description = description;
-//    }
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
